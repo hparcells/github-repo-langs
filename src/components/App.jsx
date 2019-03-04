@@ -10,6 +10,8 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import RepoData from './RepoData';
 
+const $ = require('jquery');
+
 const styles = (theme) => ({
   root: {
     flexGrow: 1
@@ -34,7 +36,8 @@ class App extends Component {
 
     this.state = {
       username: '',
-      repo: '',
+      repository: '',
+      token: '',
       languages: {},
       showCard: false
     };
@@ -44,14 +47,17 @@ class App extends Component {
     this.setState({ username: event.target.value });
     this.setState({ showCard: false });
   }
-
   handleRepoChange() {
     this.setState({ repository: event.target.value });
     this.setState({ showCard: false });
   }
+  handleTokenChange() {
+    this.setState({ token: event.target.value });
+    this.setState({ showCard: false });
+  }
 
   fetchRepo() {
-    const url = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages?access_token=${process.env.GITHUB_AUTH_TOKEN}`;
+    const url = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
 
     fetch(url).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
@@ -83,6 +89,15 @@ class App extends Component {
           <Typography paragraph>This tool was made in React using the GitHub API to fetch the languages used in your or anyone's GitHub repositories, and display them including how much of the repository
             is made of that language.
           </Typography>
+          <Typography paragraph>You can use this tool on your network up to 60 times per hour if you do not provide a personal access token. If you do want to use this more than 60 times an hour, you must
+            create your own personal access token. To do this, you have to create a GitHub account if you haven't already, and go
+            to <a href='https://github.com/settings/tokens' target='_blank' rel='noreferrer noopener'>https://github.com/settings/tokens</a>. Click on "Generate new token", type a small description like
+            "GitHub Repo Langs", check the repo checkbox, and click the generate token button at the bottom. Copy the token, <strong>KEEP THIS TOKEN SECRET</strong>, and paste it in the text box
+            below.
+          </Typography>
+          <Typography paragraph>If nothing shows up when you click the go button, one of two things must of happened. Either you mistyped the username and repository, or you hit the rate limit for the GitHub
+            API and must follow the instructions above.
+          </Typography>
           <TextField
             id="username"
             label="User or Organization"
@@ -97,6 +112,14 @@ class App extends Component {
             className={classes.textField}
             value={this.state.repository}
             onChange={this.handleRepoChange.bind(this)}
+            margin="normal"
+          />
+          <TextField
+            id="token"
+            label="Token (Optional)"
+            className={classes.textField}
+            value={this.state.token}
+            onChange={this.handleTokenChange.bind(this)}
             margin="normal"
           />
           <Button variant="outlined" color="primary" className={classes.button} onClick={this.fetchRepo.bind(this)}>
