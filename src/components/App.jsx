@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import { withStyles } from '@material-ui/core/styles';
+import SearchIcon from '@material-ui/icons/Search';
 
 import RepoData from './RepoData';
 
@@ -24,6 +22,9 @@ const styles = (theme) => ({
   button: {
     margin: theme.spacing.unit,
     marginTop: '25px'
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit
   }
 });
 
@@ -31,23 +32,35 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state =  {
+    this.state = {
       username: '',
       repo: '',
-      languages: {}
+      languages: {},
+      showCard: false
     };
   }
 
   handleUsernameChange() {
     this.setState({ username: event.target.value });
+    this.setState({ showCard: false });
   }
 
   handleRepoChange() {
-    this.setState({ repo: event.target.value });
+    this.setState({ repository: event.target.value });
+    this.setState({ showCard: false });
   }
 
   fetchRepo() {
-    fetch(`https://api.github.com/repos/${this.state.username}/${this.state.repo}/languages?access_token=${process.env.GITHUB_AUTH_TOKEN}`).then((r) => r.json()).then((parsedJSON) => {
+    const url = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages?access_token=${process.env.GITHUB_AUTH_TOKEN}`;
+
+    fetch(url).then((r) => r.json()).then((parsedJSON) => {
+      if(Object.keys(parsedJSON)[0] === 'message') {
+        return;
+      }
+
+      if(!this.state.showCard) {
+        this.setState({ showCard: true });
+      }
       this.setState({languages: parsedJSON});
     });
   }
@@ -71,7 +84,7 @@ class App extends Component {
             is made of that language.
           </Typography>
           <TextField
-            id="name"
+            id="username"
             label="User or Organization"
             className={classes.textField}
             value={this.state.username}
@@ -79,18 +92,19 @@ class App extends Component {
             margin="normal"
           />
           <TextField
-            id="repo"
+            id="repository"
             label="Repository"
             className={classes.textField}
-            value={this.state.repo}
+            value={this.state.repository}
             onChange={this.handleRepoChange.bind(this)}
             margin="normal"
           />
           <Button variant="outlined" color="primary" className={classes.button} onClick={this.fetchRepo.bind(this)}>
             Go
+            <SearchIcon className={classes.rightIcon} />
           </Button>
 
-          <RepoData languages={this.state.languages} />
+          <RepoData state={this.state} />
         </div>
       </div>
     );
