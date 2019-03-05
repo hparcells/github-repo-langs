@@ -10,8 +10,6 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import RepoData from './RepoData';
 
-const $ = require('jquery');
-
 const styles = (theme) => ({
   root: {
     flexGrow: 1
