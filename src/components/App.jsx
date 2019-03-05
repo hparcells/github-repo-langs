@@ -93,8 +93,8 @@ class App extends Component {
             "GitHub Repo Langs", check the repo checkbox, and click the generate token button at the bottom. Copy the token, <strong>KEEP THIS TOKEN SECRET</strong>, and paste it in the text box
             below.
           </Typography>
-          <Typography paragraph>If nothing shows up when you click the go button, one of two things must of happened. Either you mistyped the username and repository, or you hit the rate limit for the GitHub
-            API and must follow the instructions above.
+          <Typography paragraph>If nothing shows up when you click the go button, one of three things must of happened. Either you mistyped the username, repository (or it doesn't exist), token (or it's invalid)
+            or you hit the rate limit for the GitHub API and must follow the instructions above, or the repository is private.
           </Typography>
           <TextField
             id="username"
@@ -119,6 +119,7 @@ class App extends Component {
             value={this.state.token}
             onChange={this.handleTokenChange.bind(this)}
             margin="normal"
+            type="password"
           />
           <Button variant="outlined" color="primary" className={classes.button} onClick={this.fetchRepo.bind(this)}>
             Go
