@@ -30,19 +30,20 @@ class RepoCard extends Component {
     const { classes } = this.props;
 
     const githubURL = `https://github.com/${this.props.state.username}/${this.props.state.repository}/`;
+    const profileURL = `https://github.com/${this.props.state.username}/`;
     const languages = Object.keys(this.props.state.languages);
 
     if(this.props.state.showCard) {
       return (
         <Card id='repo-card' className={classes.card}>
           <CardContent>
-            <Typography variant="h5" component="h2">
+            <Typography variant='h5' component='h2'>
               {this.props.state.repository}
             </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              {this.props.state.username}
+            <Typography className={classes.pos} color='textSecondary'>
+              <a className='repo-card-user-url' href={profileURL} target='_blank' rel='noreferrer noopener'>{this.props.state.username}</a>
             </Typography>
-            <Typography component="p">
+            <Typography component='p'>
               {
                 languages.map((language) => {
                   return <li>{language} ({ prettyBytes(this.props.state.languages[language]) })</li>;
@@ -51,7 +52,7 @@ class RepoCard extends Component {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" target="_blank" href={githubURL}>View on GitHub</Button>
+            <Button size='small' variant='outlined' color='primary' href={githubURL} target='_blank' rel='noreferrer noopener'>View on GitHub</Button>
           </CardActions>
         </Card>
       );
