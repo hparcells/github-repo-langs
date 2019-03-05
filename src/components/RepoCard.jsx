@@ -25,7 +25,7 @@ const styles = {
   }
 };
 
-class RepoData extends Component {
+class RepoCard extends Component {
   render() {
     const { classes } = this.props;
 
@@ -34,7 +34,7 @@ class RepoData extends Component {
 
     if(this.props.state.showCard) {
       return (
-        <Card className={classes.card}>
+        <Card id='repo-card' className={classes.card}>
           <CardContent>
             <Typography variant="h5" component="h2">
               {this.props.state.repository}
@@ -61,4 +61,4 @@ class RepoData extends Component {
   }
 }
 
-export default hot(withStyles(styles)(RepoData));
+export default hot(withStyles(styles)(RepoCard));

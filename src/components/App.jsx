@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 
-import RepoData from './RepoData';
+import RepoCard from './RepoCard';
 
 const styles = (theme) => ({
   root: {
@@ -126,7 +126,7 @@ class App extends Component {
             <SearchIcon className={classes.rightIcon} />
           </Button>
 
-          <RepoData state={this.state} />
+          <RepoCard state={this.state} />
         </div>
       </div>
     );
