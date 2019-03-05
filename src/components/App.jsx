@@ -91,7 +91,7 @@ class App extends Component {
             create your own personal access token. To do this, you have to create a GitHub account if you haven't already, and go
             to <a href='https://github.com/settings/tokens' target='_blank' rel='noreferrer noopener'>https://github.com/settings/tokens</a>. Click on "Generate new token", type a small description like
             "GitHub Repo Langs", check the repo checkbox, and click the generate token button at the bottom. Copy the token, <strong>KEEP THIS TOKEN SECRET</strong>, and paste it in the text box
-            below.
+            below. Doing this allows you to increase the amount of times you can use this, and you can get to see the languages on your private repositories.
           </Typography>
           <Typography paragraph>If nothing shows up when you click the go button, one of three things must of happened. Either you mistyped the username, repository (or it doesn't exist), token (or it's invalid)
             or you hit the rate limit for the GitHub API and must follow the instructions above, or the repository is private.

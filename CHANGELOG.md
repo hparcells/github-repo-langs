@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.2.0 [03/05/2019]
 ### Additions
 - User under repository name is now a link to their profile page.
+- Added explaination about private repositories and tokens.
 
 ### Changes
 - Made the page more mobile friendly.
