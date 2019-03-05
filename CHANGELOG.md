@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Made the page more mobile friendly.
 - Made the View on GitHub button outlined.
 
+### Removals
+- Removed talking about rate limits.
+
 ## 1.1.0 [03/04/2019]
 ### Changes
 - Added that private repositories don't work.
