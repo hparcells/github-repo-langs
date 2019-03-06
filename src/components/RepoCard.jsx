@@ -27,26 +27,26 @@ const styles = {
 
 class RepoCard extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, appState : { username, repository, languages, showCard } } = this.props;
 
-    const githubURL = `https://github.com/${this.props.state.username}/${this.props.state.repository}/`;
-    const profileURL = `https://github.com/${this.props.state.username}/`;
-    const languages = Object.keys(this.props.state.languages);
+    const githubURL = `https://github.com/${username}/${repository}/`;
+    const profileURL = `https://github.com/${username}/`;
+    const repositoryLanguages = Object.keys(languages);
 
-    if(this.props.state.showCard) {
+    if(showCard) {
       return (
         <Card id='repo-card' className={classes.card}>
           <CardContent>
             <Typography variant='h5' component='h2'>
-              {this.props.state.repository}
+              {repository}
             </Typography>
             <Typography className={classes.pos} color='textSecondary'>
-              <a className='repo-card-user-url' href={profileURL} target='_blank' rel='noreferrer noopener'>{this.props.state.username}</a>
+              <a className='repo-card-user-url' href={profileURL} target='_blank' rel='noreferrer noopener'>{username}</a>
             </Typography>
             <Typography component='p'>
               {
-                languages.map((language) => {
-                  return <li>{language} ({ prettyBytes(this.props.state.languages[language]) })</li>;
+                repositoryLanguages.map((language) => {
+                  return <li>{language} ({ prettyBytes(languages[language]) })</li>;
                 })
               }
             </Typography>

@@ -125,7 +125,7 @@ class App extends Component {
             <SearchIcon className={classes.rightIcon} />
           </Button>
 
-          <RepoCard state={this.state} />
+          <RepoCard appState={this.state} />
         </div>
       </div>
     );
