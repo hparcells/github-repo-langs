@@ -39,7 +39,8 @@ class App extends Component {
       languages: {},
       showCard: false,
       encodedReadme: '',
-      description: ''
+      description: '',
+      commitInfo: []
     };
   }
 
@@ -64,10 +65,6 @@ class App extends Component {
       }
 
       this.setState({description: parsedJSON.description});
-
-      if(!this.state.showCard) {
-        this.setState({ showCard: true });
-      }
     });
 
     const repositoryLanguagesURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
@@ -86,6 +83,19 @@ class App extends Component {
       }
 
       this.setState({encodedReadme: parsedJSON.content});
+    });
+
+    const repositoryCommitURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/commits${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    fetch(repositoryCommitURL).then((r) => r.json()).then((parsedJSON) => {
+      if(Object.keys(parsedJSON)[0] === 'message') {
+        return;
+      }
+
+      this.setState({commitInfo: parsedJSON});
+
+      if(!this.state.showCard) {
+        this.setState({ showCard: true });
+      }
     });
   }
 

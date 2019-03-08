@@ -34,7 +34,7 @@ const styles = (theme) => ({
 
 class RepositoryInfo extends Component {
   render() {
-    const { classes, appState : { username, repository, languages, showCard, encodedReadme, description } } = this.props;
+    const { classes, appState : { username, repository, languages, showCard, encodedReadme, description, commitInfo } } = this.props;
 
     const githubURL = `https://github.com/${username}/${repository}/`;
     const profileURL = `https://github.com/${username}/`;
@@ -63,9 +63,17 @@ class RepositoryInfo extends Component {
           </Card>
 
           <Paper className={classes.root} style={{marginBottom: '30px'}}>
+            <Typography variant='h5'>README</Typography>
             <Smackdown
               source={atob(encodedReadme)}
             />
+          </Paper>
+
+          <Paper className={classes.root} style={{marginBottom: '30px'}}>
+            <Typography variant='h5'>Stats</Typography>
+            <ul>
+              <li><Typography paragraph><strong>Last Commit</strong>: {commitInfo[0].commit.message} (<a href={commitInfo[0].html_url} target='_blank' rel='noreferrer noopener'>{commitInfo[0].sha.substring(0, 7)}</a>) by <a href={commitInfo[0].author.html_url}>{commitInfo[0].commit.author.name}</a> on {new Date(commitInfo[0].commit.author.date).toString()}</Typography></li>
+            </ul>
           </Paper>
         </>
       );
