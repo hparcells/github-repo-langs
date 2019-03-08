@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 
-import RepoCard from './RepoCard';
+import RepositoryInfo from './RepositoryInfo';
 
 const styles = (theme) => ({
   root: {
@@ -37,7 +37,9 @@ class App extends Component {
       repository: '',
       token: '',
       languages: {},
-      showCard: false
+      showCard: false,
+      encodedReadme: '',
+      description: ''
     };
   }
 
@@ -55,17 +57,35 @@ class App extends Component {
   }
 
   fetchRepo() {
-    const url = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
-
-    fetch(url).then((r) => r.json()).then((parsedJSON) => {
+    const repositoryURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    fetch(repositoryURL).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
         return;
       }
 
+      this.setState({description: parsedJSON.description});
+
       if(!this.state.showCard) {
         this.setState({ showCard: true });
       }
+    });
+
+    const repositoryLanguagesURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    fetch(repositoryLanguagesURL).then((r) => r.json()).then((parsedJSON) => {
+      if(Object.keys(parsedJSON)[0] === 'message') {
+        return;
+      }
+
       this.setState({languages: parsedJSON});
+    });
+
+    const repositoryReadmeURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/readme${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    fetch(repositoryReadmeURL).then((r) => r.json()).then((parsedJSON) => {
+      if(Object.keys(parsedJSON)[0] === 'message') {
+        return;
+      }
+
+      this.setState({encodedReadme: parsedJSON.content});
     });
   }
 
@@ -125,7 +145,7 @@ class App extends Component {
             <SearchIcon className={classes.rightIcon} />
           </Button>
 
-          <RepoCard appState={this.state} />
+          <RepositoryInfo appState={this.state} />
         </div>
       </div>
     );
