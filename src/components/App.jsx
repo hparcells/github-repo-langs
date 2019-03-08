@@ -39,7 +39,7 @@ class App extends Component {
       languages: {},
       showCard: false,
       encodedReadme: '',
-      description: '',
+      repositoryInformation: {},
       commitInfo: []
     };
   }
@@ -59,15 +59,17 @@ class App extends Component {
 
   fetchRepo() {
     const repositoryURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    const repositoryLanguagesURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    const repositoryReadmeURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/readme${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    const repositoryCommitURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/commits${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+
     fetch(repositoryURL).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
         return;
       }
 
-      this.setState({description: parsedJSON.description});
+      this.setState({repositoryInformation: parsedJSON});
     });
-
-    const repositoryLanguagesURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
     fetch(repositoryLanguagesURL).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
         return;
@@ -75,8 +77,6 @@ class App extends Component {
 
       this.setState({languages: parsedJSON});
     });
-
-    const repositoryReadmeURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/readme${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
     fetch(repositoryReadmeURL).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
         return;
@@ -84,8 +84,6 @@ class App extends Component {
 
       this.setState({encodedReadme: parsedJSON.content});
     });
-
-    const repositoryCommitURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/commits${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
     fetch(repositoryCommitURL).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
         return;

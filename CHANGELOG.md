@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README of the repository is in a Paper element below the languages.
 - Repository States
   - Last commit with author, time, commit message.
+  - Open issues.
+  - Forks
+  - License
+  - Creation date.
 
 ## Changes
 - User is now in the title of the card with links.

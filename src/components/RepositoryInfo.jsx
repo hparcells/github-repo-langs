@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Paper from '@material-ui/core/Paper';
 import prettyBytes from 'pretty-bytes';
 import Smackdown from 'react-smackdown';
+import dateFormat from 'dateformat';
 
 const styles = (theme) => ({
   root: {
@@ -34,7 +35,7 @@ const styles = (theme) => ({
 
 class RepositoryInfo extends Component {
   render() {
-    const { classes, appState : { username, repository, languages, showCard, encodedReadme, description, commitInfo } } = this.props;
+    const { classes, appState : { username, repository, languages, showCard, encodedReadme, repositoryInformation, commitInfo } } = this.props;
 
     const githubURL = `https://github.com/${username}/${repository}/`;
     const profileURL = `https://github.com/${username}/`;
@@ -48,7 +49,7 @@ class RepositoryInfo extends Component {
               <Typography variant='h5' component='h2'>
                 <a className='repo-card-url repo-card-user-url' href={profileURL} target='_blank' rel='noreferrer noopener'>{username}</a>/<a className='repo-card-url' href={githubURL} target='_blank' rel='noreferrer noopener'>{repository}</a>
               </Typography>
-              <Typography className={classes.pos} color='textSecondary'>{description}</Typography>
+              <Typography className={classes.pos} color='textSecondary'>{repositoryInformation.description}</Typography>
               <Typography component='p'>
                 {
                   repositoryLanguages.map((language) => {
@@ -72,7 +73,11 @@ class RepositoryInfo extends Component {
           <Paper className={classes.root} style={{marginBottom: '30px'}}>
             <Typography variant='h5'>Stats</Typography>
             <ul>
-              <li><Typography paragraph><strong>Last Commit</strong>: {commitInfo[0].commit.message} (<a href={commitInfo[0].html_url} target='_blank' rel='noreferrer noopener'>{commitInfo[0].sha.substring(0, 7)}</a>) by <a href={commitInfo[0].author.html_url}>{commitInfo[0].commit.author.name}</a> on {new Date(commitInfo[0].commit.author.date).toString()}</Typography></li>
+              <li><strong>Last Commit</strong>: {commitInfo[0].commit.message} (<a href={commitInfo[0].html_url} target='_blank' rel='noreferrer noopener'>{commitInfo[0].sha.substring(0, 7)}</a>) by <a href={commitInfo[0].author.html_url}>{commitInfo[0].commit.author.name}</a> on {dateFormat(commitInfo[0].commit.author.date, 'dddd, mmmm dS, yyyy, h:MM:ss TT')}</li>
+              <li><strong>Open Issues</strong>: {repositoryInformation.open_issues}</li>
+              <li><strong>Forks</strong>: {repositoryInformation.forks}</li>
+              <li><strong>License</strong>: {repositoryInformation.license.name}</li>
+              <li><strong>Repository Creation Date</strong>: {dateFormat(repositoryInformation.created_at, 'dddd, mmmm dS, yyyy, h:MM:ss TT')}</li>
             </ul>
           </Paper>
         </>
