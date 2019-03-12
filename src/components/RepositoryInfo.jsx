@@ -7,6 +7,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
 import prettyBytes from 'pretty-bytes';
 import Smackdown from 'react-smackdown';
 import dateFormat from 'dateformat';
@@ -30,12 +31,16 @@ const styles = (theme) => ({
   },
   pos: {
     marginBottom: 12
+  },
+  chip: {
+    marginBottom: theme.spacing.unit,
+    marginRight: '5px'
   }
 });
 
 class RepositoryInfo extends Component {
   render() {
-    const { classes, appState : { username, repository, languages, showCard, encodedReadme, repositoryInformation, commitInfo } } = this.props;
+    const { classes, appState : { username, repository, languages, showCard, encodedReadme, repositoryInformation, commitInfo, topics } } = this.props;
 
     const githubURL = `https://github.com/${username}/${repository}/`;
     const profileURL = `https://github.com/${username}/`;
@@ -50,6 +55,12 @@ class RepositoryInfo extends Component {
                 <a className='repo-card-url repo-card-user-url' href={profileURL} target='_blank' rel='noreferrer noopener'>{username}</a>/<a className='repo-card-url' href={githubURL} target='_blank' rel='noreferrer noopener'>{repository}</a>
               </Typography>
               <Typography className={classes.pos} color='textSecondary'>{repositoryInformation.description}</Typography>
+              {
+                topics.map((topic) => {
+                  const topicURL = `https://github.com/topics/${topic}`;
+                  return <Chip label={topic} className={classes.chip} component="a" href={topicURL} target='_blank' rel='noreferrer noopener' clickable />;
+                })
+              }
               <Typography component='p'>
                 {
                   repositoryLanguages.map((language) => {

@@ -40,7 +40,8 @@ class App extends Component {
       showCard: false,
       encodedReadme: '',
       repositoryInformation: {},
-      commitInfo: []
+      commitInfo: [],
+      topics: []
     };
   }
 
@@ -62,6 +63,7 @@ class App extends Component {
     const repositoryLanguagesURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/languages${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
     const repositoryReadmeURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/readme${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
     const repositoryCommitURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/commits${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
+    const topicsURL = `https://api.github.com/repos/${this.state.username}/${this.state.repository}/topics${this.state.token !== '' ? `?access_token=${this.state.token}` : ''}`;
 
     fetch(repositoryURL).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
@@ -84,6 +86,17 @@ class App extends Component {
 
       this.setState({encodedReadme: parsedJSON.content});
     });
+    fetch(topicsURL, {
+      headers: {
+        'Accept': 'application/vnd.github.mercy-preview+json'
+      }
+    }).then((r) => r.json()).then((parsedJSON) => {
+      if(Object.keys(parsedJSON)[0] === 'message') {
+        return;
+      }
+
+      this.setState({topics: parsedJSON.names});
+    });
     fetch(repositoryCommitURL).then((r) => r.json()).then((parsedJSON) => {
       if(Object.keys(parsedJSON)[0] === 'message') {
         return;
@@ -102,53 +115,53 @@ class App extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar id='main-app-bar' position="static" color="primary">
+        <AppBar id='main-app-bar' position='static' color='primary'>
           <Toolbar>
-            <Typography variant="h6" color="inherit">
+            <Typography variant='h6' color='inherit'>
               GitHub Repository Languages
             </Typography>
           </Toolbar>
         </AppBar>
 
-        <div id="appContent">
-          <Typography variant="h3" color="inherit" gutterBottom>GitHub Repository Languages</Typography>
+        <div id='appContent'>
+          <Typography variant='h3' color='inherit' gutterBottom>GitHub Repository Languages</Typography>
           <Typography paragraph>This tool was made in React using the GitHub API to fetch the languages used in your or anyone's GitHub repositories, and display them including how much of the repository
             is made of that language.
           </Typography>
           <Typography paragraph>This app currently does not support private repositories, if you want to see your own private repositories, you must create your own personal access token. To do this,
             you have to create a GitHub account if you haven't already, and go to <a href='https://github.com/settings/tokens' target='_blank' rel='noreferrer noopener'>https://github.com/settings/tokens</a>.
-            Click on "Generate new token", type a small description like "GitHub Repo Langs", check the repo checkbox, and click the generate token button at the bottom. Copy the token, <strong>KEEP THIS TOKEN
+            Click on 'Generate new token', type a small description like 'GitHub Repo Langs', check the repo checkbox, and click the generate token button at the bottom. Copy the token, <strong>KEEP THIS TOKEN
             SECRET</strong>, and paste it in the text box below.
           </Typography>
           <Typography paragraph>If nothing shows up when you click the go button, one of three things must of happened. Either you mistyped the username, repository (or it doesn't exist), token (or it's invalid)
             or you hit the rate limit for the GitHub API and must follow the instructions above, or the repository is private.
           </Typography>
           <TextField
-            id="username"
-            label="User or Organization"
+            id='username'
+            label='User or Organization'
             className={classes.textField}
             value={this.state.username}
             onChange={this.handleUsernameChange.bind(this)}
-            margin="normal"
+            margin='normal'
           />
           <TextField
-            id="repository"
-            label="Repository"
+            id='repository'
+            label='Repository'
             className={classes.textField}
             value={this.state.repository}
             onChange={this.handleRepoChange.bind(this)}
-            margin="normal"
+            margin='normal'
           />
           <TextField
-            id="token"
-            label="Token (Optional)"
+            id='token'
+            label='Token (Optional)'
             className={classes.textField}
             value={this.state.token}
             onChange={this.handleTokenChange.bind(this)}
-            margin="normal"
-            type="password"
+            margin='normal'
+            type='password'
           />
-          <Button variant="outlined" color="primary" className={classes.button} onClick={this.fetchRepo.bind(this)}>
+          <Button variant='outlined' color='primary' className={classes.button} onClick={this.fetchRepo.bind(this)}>
             Go
             <SearchIcon className={classes.rightIcon} />
           </Button>
